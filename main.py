@@ -1,5 +1,6 @@
 import argparse
-from tdict import Tdict
+from utils import DictTree
+#from tdict import Tdict
 import agents
 import envs
 import pickle
@@ -9,13 +10,14 @@ import plot
 import sys
 
 def rollout(config):
-    env = envs.catalog(Tdict(
+    env = envs.catalog(DictTree(
         domain_name=config.domain,
         hardware_name=config.hardware
     ))
-    agent = agents.catalog(Tdict(
+    agent = agents.catalog(DictTree(
+        domain_name=config.domain,
         task_name=config.task,
-        hardware_name=config.hardware
+        hardware_name=config.hardware,
     ))
 
     init_arg = env.reset()

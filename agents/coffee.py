@@ -3,6 +3,11 @@ from . import hierarchy
 
 
 class CoffeeAgent(hardware.HardwareAgent):
+    def __init__(self, config):
+        super().__init__(config)
+        self.domain_name = config.domain_name
+        self.task_name = config.task_name
+
     @property
     def root_skill_name(self):
         return 'DeliverCoffee'
