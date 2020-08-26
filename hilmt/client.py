@@ -12,7 +12,12 @@ def delete(agent):
 
 
 def register(agent):
-    data = json.dumps(agent.skill_set, cls=DictTree.JSONEncoder)
+    print("Debug Starts: ")
+    for skill, skill_class in agent.get_skill_set().items():
+        print("Key is ", skill, ". Type is ", type(skill))
+        print("Value is ", skill_class, ". Type is ", type(skill_class))
+    data = json.dumps(agent.get_skill_set(), cls=DictTree.JSONEncoder)
+    print("\nData is ", data)
     return DictTree(req.post('{}/agent/{}/{}/'.format(SERVER_URL, agent.domain_name, agent.task_name), data=data).json())
 
 
