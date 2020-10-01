@@ -1,6 +1,5 @@
 import argparse
 from utils import DictTree
-#from tdict import Tdict
 import agents
 import envs
 import pickle
@@ -38,8 +37,8 @@ if __name__ == '__main__':
 
     # Displays GUI of robot moving through gridworld
 
-    moves_list = pickle.load(open("moves_list.pkl", 'rb'))
-    robo_ani.display_env(args.hardware, moves_list)
+    # moves_list = pickle.load(open("moves_list.pkl", 'rb'))
+    # robo_ani.display_env(args.hardware, moves_list)
 
     # Creates video of hierarchy
 

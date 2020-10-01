@@ -16,7 +16,7 @@ if __name__ == '__main__' and __package__ is None:
 
 import models  # noqa: E402
 import utils  # noqa: E402
-from utils import DictTree  # noqa: E402
+from utils import DictTree
 
 DEBUG = True
 # logging.basicConfig()

@@ -10,7 +10,6 @@ import numpy as np
 import agents
 from hilmt import client
 from utils import DictTree
-#from tdict import tdict
 
 def load_traces(dirname):
     return [pickle.load(open(filename, 'rb')) for filename in glob.iglob("{}/*.pkl".format(dirname))]
@@ -76,4 +75,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
     args.runs = 1
     for _ in range(int(args.runs) or 1):
+        print("Type of args is", type(args))
         train(args)

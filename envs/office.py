@@ -262,6 +262,9 @@ class Office(env.Env):
         self.moves_list.append([(self.robot_curr_pos[0], self.REFORM_GRIDY[self.robot_curr_pos[1]]), self.has_coffee])
 
     class ObserveEnv(env.Action):
+        arg_in_len = 1
+        ret_out_len = 3
+
         @staticmethod
         def apply(e, arg):
             """
@@ -272,11 +275,14 @@ class Office(env.Env):
             #assert arg in [[0], [1]]
 
             if arg == [0]:
-                return [e.COFFEE_POS, e.robot_curr_pos, e.OFFICE_G]
+                return [e.COFFEE_POS, tuple(e.robot_curr_pos), e.OFFICE_G]
             if arg == [1]:
-                return [e.OFFICE_POS, e.robot_curr_pos, e.OFFICE_G]
+                return [e.OFFICE_POS, tuple(e.robot_curr_pos), e.OFFICE_G]
 
     class Move(env.Action):
+        arg_in_len = 3
+        ret_out_len = 1
+
         @staticmethod
         def legal_move(e, move_to):
             if not tuple(np.asarray(move_to) - e.robot_curr_pos) in e.get_possible_move_list():
@@ -297,9 +303,9 @@ class Office(env.Env):
 
             if tuple(e.robot_curr_pos) == fin_dest:
                 e.display_env_info(0)
-                return True
+                return [True]
             elif Office.Move.legal_move(e, move_to):
                 e.robot_curr_pos = np.asarray(move_to)
                 e.display_env_info(1)
             else:
-                return False
+                return [False]

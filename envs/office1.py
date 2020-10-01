@@ -13,6 +13,9 @@ class Office1(office.Office):
         }
 
     class ObservePick(env.Action):
+        arg_in_len = 1
+        ret_out_len = 1
+
         @staticmethod
         def apply(e, arg):
             if arg == [0]:
@@ -25,6 +28,9 @@ class Office1(office.Office):
                 return [False]
 
     class ObserveDrop(env.Action):
+        arg_in_len = 1
+        ret_out_len = 1
+
         @staticmethod
         def apply(e, arg):
             if arg == [1]:
