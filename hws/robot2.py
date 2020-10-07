@@ -27,24 +27,26 @@ class Robot2(robot.Robot):
                 ret_val: after ObserveEnv -> [coffee or office coordinates, robot current pos coordinates, office graph]
                          after Move -> True or False
             """
-            # if ret_name == 'Move' and ret_val == [True]:
-            #     return None, [True]
-            #
-            # if cnt % 2 == 0 and ret_val != [True]:
-            #     return 'ObserveEnv', arg
-            # else:
-            #     path = Robot2.MoveToPosition.plan_path(*ret_val)
-            #     return 'Move', [path, ret_val[0], 2]
-            #     # return 'Move', [path, ret_val[0], 'robot2']
-
             if ret_name in [None, 'Move']:
                 if ret_val:
                     return None, [True]
                 else:
                     return 'ObserveEnv', arg
-            else:
-                move_to = Robot2.plan_path(*ret_val)
-                return 'Move', [move_to, ret_val[0], 2]
+            elif ret_name == 'ObserveEnv':
+                return 'PlanPath', [1]+ret_val
+            elif ret_name == 'PlanPath':
+                # move_to = Robot2.plan_path(*ret_val)
+                return 'Move', ret_val + [2]
+
+            # if ret_name == 'Move' and ret_val == [True]:
+            #     return None, [True]
+            # elif ret_name == 'Move' and cnt % 2 == 0 and ret_val != [True]:
+            #     return 'ObserveEnv', arg
+            # elif ret_name == 'ObserveEnv':
+            #     return 'PlanPath', [1]+ret_val
+            # elif ret_name == 'PlanPath':
+            #     #move_to = Robot2.plan_path(*ret_val)
+            #     return 'Move', [ret_val[0], ret_val[1], 2]
 
     class Grasp(hierarchy.Skill):
         @staticmethod

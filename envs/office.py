@@ -263,7 +263,7 @@ class Office(env.Env):
 
     class ObserveEnv(env.Action):
         arg_in_len = 1
-        ret_out_len = 3
+        ret_out_len = 4
 
         @staticmethod
         def apply(e, arg):
@@ -275,9 +275,40 @@ class Office(env.Env):
             #assert arg in [[0], [1]]
 
             if arg == [0]:
-                return [e.COFFEE_POS, tuple(e.robot_curr_pos), e.OFFICE_G]
+                return list(e.COFFEE_POS) + list(e.robot_curr_pos)
             if arg == [1]:
-                return [e.OFFICE_POS, tuple(e.robot_curr_pos), e.OFFICE_G]
+                return list(e.OFFICE_POS) + list(e.robot_curr_pos)
+
+    class PlanPath(env.Action):
+        arg_in_len = 5
+        ret_out_len = 4
+
+        @staticmethod
+        def apply(e, arg):
+            if arg[0] == 0:
+                curr_dest = (arg[3], arg[4])
+                fin_dest = (arg[1], arg[2])
+
+                h = e.OFFICE_G.copy()
+                edges_to_remove = [edge for edge in h.edges(data=True) if (h.get_edge_data(*edge))]
+                h.remove_edges_from(edges_to_remove)
+                path = nx.shortest_path(h, source=curr_dest, target=fin_dest)
+                if len(path) > 1:
+                    move_coords = path[1]
+                else:
+                    move_coords = path[0]
+                return list(move_coords) + list(fin_dest)
+            elif arg[0] == 1:
+                curr_dest = (arg[3], arg[4])
+                fin_dest = (arg[1], arg[2])
+
+                path = nx.shortest_path(e.OFFICE_G, source=curr_dest, target=fin_dest)
+                # print("Planned path: ", path)
+                if len(path) > 1:
+                    move_coords = path[1]
+                else:
+                    move_coords = path[0]
+                return list(move_coords) + list(fin_dest)
 
     class Move(env.Action):
         arg_in_len = 3
@@ -298,8 +329,8 @@ class Office(env.Env):
                 arg: coordinates to move to, final destination coordinates, robot_name
                 ret_val: True or False if moved to final position yet
             """
-            move_to = arg[0]
-            fin_dest = arg[1]
+            move_to = (arg[0], arg[1])
+            fin_dest = (arg[2], arg[3])
 
             if tuple(e.robot_curr_pos) == fin_dest:
                 e.display_env_info(0)
