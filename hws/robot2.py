@@ -20,6 +20,10 @@ class Robot2(robot.Robot):
         return move_coords
 
     class MoveToPosition(hierarchy.Skill):
+        arg_in_len = 1
+        sub_skill_names = ['ObserveEnv', 'Move', 'PlanPath']
+        ret_out_len = 1  # LeoLuo
+
         @staticmethod
         def step(arg, cnt, ret_name, ret_val):
             """

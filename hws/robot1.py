@@ -25,7 +25,7 @@ class Robot1(robot.Robot):
     class MoveToPosition(hierarchy.Skill):
 
         arg_in_len = 1
-        sub_skill_names = ['ObserveEnv', 'Move']
+        sub_skill_names = ['ObserveEnv', 'Move', 'PlanPath']
         ret_out_len = 1  # LeoLuo
 
         @staticmethod

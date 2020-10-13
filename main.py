@@ -31,6 +31,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain')
     parser.add_argument('--task')
+    parser.add_argument('--model')
+    parser.add_argument('--data')
     parser.add_argument('--hardware')
     args = parser.parse_args()
     rollout(args)

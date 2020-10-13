@@ -19,6 +19,7 @@ import utils  # noqa: E402
 from utils import DictTree
 
 DEBUG = True
+f = open("output.txt", "w")
 # logging.basicConfig()
 # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
@@ -99,6 +100,8 @@ def agent(domain_name, agent_name):
     except Exception as e:
         if DEBUG:
             print(traceback.format_exc())
+            f.write(traceback.format_exc())
+            f.write("\n")
             flask.request.environ.get('werkzeug.server.shutdown')()
         else:
             raise e
@@ -107,6 +110,8 @@ def agent(domain_name, agent_name):
 def delete(domain_name, agent_name):
     if DEBUG:
         print("delete({}, {})".format(domain_name, agent_name))
+        f.write("delete({}, {})".format(domain_name, agent_name))
+        f.write("\n")
     SubSkill.query.filter(SubSkill.domain_name == domain_name).filter(SubSkill.agent_name == agent_name).delete()
     AgentSkill.query.filter(AgentSkill.domain_name == domain_name).filter(AgentSkill.agent_name == agent_name).delete()
     SkillModel.query.filter(~SkillModel.agent_skills.any()).delete(synchronize_session='fetch')
@@ -117,11 +122,15 @@ def delete(domain_name, agent_name):
 def register(domain_name, agent_name):
     if DEBUG:
         print("register({}, {})".format(domain_name, agent_name))
+        f.write(("register({}, {})".format(domain_name, agent_name)))
+        f.write("\n")
     skillset = json.loads(flask.request.data, cls=DictTree.JSONDecoder)
     res = DictTree()
     for skill_name, skill in skillset.items():
         if DEBUG:
             print("Registering {}".format(skill_name))
+            f.write(("Registering {}".format(skill_name)))
+            f.write("\n")
         skill_model = None
         if len(skill.sub_skill_names) > 0:
             skill_model = SkillModel(
@@ -157,6 +166,8 @@ def register(domain_name, agent_name):
 def train(domain_name, agent_name):
     if DEBUG:
         print("train({}, {})".format(domain_name, agent_name))
+        f.write("train({}, {})".format(domain_name, agent_name))
+        f.write("\n")
     config = json.loads(flask.request.data, cls=DictTree.JSONDecoder)
     skill_steps = {}
     for trace in config.batch:
@@ -177,9 +188,13 @@ def train(domain_name, agent_name):
             raise ValueError("Agent {}/{} has no skill {}".format(domain_name, agent_name, skill_name))
         if DEBUG:
             print("Training {} with {} new steps + {} existing".format(skill_name, len(steps), len(agent_skill.data or [])))
+            f.write("Training {} with {} new steps + {} existing".format(skill_name, len(steps), len(agent_skill.data or [])))
+            f.write("\n")
         agent_skill.data = (agent_skill.data or []) + steps
         if len(agent_skill.data) < agent_skill.min_valid_data:
             print("Not enough data to train {}".format(skill_name))
+            f.write("Not enough data to train {}".format(skill_name))
+            f.write("\n")
             agent_skill.validated = False
         else:
             shared_skills = []
@@ -204,17 +219,25 @@ def train(domain_name, agent_name):
                     if DEBUG:
                         print("Trying to validate with {} steps from {}".format(
                             len(shared_data), [(shared_skill.agent_name, shared_skill.skill_name) for shared_skill in shared_skills]))
+                        f.write("Trying to validate with {} steps from {}".format(
+                            len(shared_data),[(shared_skill.agent_name, shared_skill.skill_name) for shared_skill in shared_skills]))
+                        f.write("\n")
                     shared_data = _process(agent_skill, shared_data)
                     validated = _validate(agent_skill, shared_data, config.validate, config.model_dirname)
                 else:  # train
                     if DEBUG:
                         print("Trying to train with {} steps from {}".format(
                             len(shared_data), [(shared_skill.agent_name, shared_skill.skill_name) for shared_skill in shared_skills]))
+                        f.write("Trying to train with {} steps from {}".format(
+                            len(shared_data), [(shared_skill.agent_name, shared_skill.skill_name) for shared_skill in shared_skills]))
+                        f.write("\n")
                     validated = _train(agent_skill, shared_data, config.validate, config.model_dirname)
                 if validated:
                     # TODO: clean up training_model once a transfer model is finalized
                     if DEBUG:
                         print("Success!!!")
+                        f.write("Success!!!")
+                        f.write("\n")
                     agent_skill.validated = True
                     break
             else:

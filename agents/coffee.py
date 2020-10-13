@@ -1,16 +1,42 @@
 from . import hardware
 from . import hierarchy
-
+from envs.office1 import Office1
+from utils import DictTree
 
 class CoffeeAgent(hardware.HardwareAgent):
     def __init__(self, config):
         super().__init__(config)
         self.domain_name = config.domain_name
         self.task_name = config.task_name
+        self.actions = Office1.action_set
 
     @property
     def root_skill_name(self):
         return 'DeliverCoffee'
+
+    def get_skillset(self):
+        # print(self.skill_set)
+        # print(self.actions)
+        to_return = DictTree({skill: DictTree(
+            step=None,
+            model_name=getattr(skill_class, 'model_name', "log_poly2"),
+            arg_in_len=skill_class.arg_in_len,
+            max_cnt=getattr(skill_class, 'max_cnt', None),
+            sub_skill_names=getattr(skill_class, 'sub_skill_names', []),
+            ret_out_len=skill_class.ret_out_len,
+            min_valid_data=getattr(skill_class, 'min_valid_data', None),
+            sub_arg_accuracy=getattr(skill_class, 'sub_arg_accuracy', None),
+        ) for skill, skill_class in list(self.skill_set.items()) + list(self.actions.items())})
+
+        for skill in to_return.values():
+            if skill.sub_skill_names:
+                skill.ret_in_len = max(
+                    to_return[sub_skill_name].ret_out_len for sub_skill_name in skill.sub_skill_names)
+                skill.arg_out_len = max(skill.ret_out_len, max(
+                    to_return[sub_skill_name].arg_in_len for sub_skill_name in skill.sub_skill_names))
+        self.stack = None
+        self.last_act_name = None
+        return to_return
 
     class DeliverCoffee(hierarchy.Skill):
         arg_in_len = 0
