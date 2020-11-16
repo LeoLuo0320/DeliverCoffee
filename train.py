@@ -67,6 +67,7 @@ def train(config):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--domain', required=True)
+    #parser.add_argument('--tasks', required=True)
     parser.add_argument('--tasks', nargs='+', required=True)
     parser.add_argument('--data', required=True)
     parser.add_argument('--runs')

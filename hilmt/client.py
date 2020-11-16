@@ -7,7 +7,7 @@ from networkx.readwrite import json_graph
 from utils import DictTree
 
 SERVER_URL = 'http://localhost:5000'
-f = open("output.txt", "w")
+#f = open("output.txt", "w")
 
 class MyEncoder(DictTree.JSONEncoder):
     def default(self, o):
