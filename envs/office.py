@@ -9,6 +9,10 @@ import pickle
 class Office(env.Env):
     OFFICE_WIDTH = 12
     OFFICE_HEIGHT = 9
+
+    # ROBOT_INIT_POS =(11,5)
+    # COFFEE_POS = (1, 0)
+    # OFFICE_POS = (5, 8)
     ROBOT_INIT_POS = (random.randint(0,OFFICE_WIDTH-1), random.randint(0,OFFICE_HEIGHT-1))
     COFFEE_POS = (random.randint(0,OFFICE_WIDTH-1), random.randint(0,OFFICE_HEIGHT-1))
     OFFICE_POS = (random.randint(0,OFFICE_WIDTH-1), random.randint(0,OFFICE_HEIGHT-1))
@@ -186,24 +190,30 @@ class Office(env.Env):
     # Removed edges represent walls
     OFFICE_G.remove_edge((0, 2), (0, 3))
     OFFICE_G.remove_edge((0, 5), (0, 6))
-
+    OFFICE_G.remove_edge((2, 2), (2, 3))
+    OFFICE_G.remove_edge((2, 5), (2, 6))
+    OFFICE_G.remove_edge((3, 2), (3, 3))
+    OFFICE_G.remove_edge((3, 5), (3, 6))
+    OFFICE_G.remove_edge((4, 2), (4, 3))
+    OFFICE_G.remove_edge((5, 2), (5, 3))
+    OFFICE_G.remove_edge((5, 5), (5, 6))
+    OFFICE_G.remove_edge((6, 2), (6, 3))
+    OFFICE_G.remove_edge((6, 5), (6, 6))
+    OFFICE_G.remove_edge((7, 2), (7, 3))
+    OFFICE_G.remove_edge((8, 2), (8, 3))
+    OFFICE_G.remove_edge((8, 5), (8, 6))
+    OFFICE_G.remove_edge((9, 2), (9, 3))
+    OFFICE_G.remove_edge((9, 5), (9, 6))
     OFFICE_G.remove_edge((11, 2), (11, 3))
     OFFICE_G.remove_edge((11, 5), (11, 6))
 
-    OFFICE_G.remove_edge((4, 2), (4, 3))
-    OFFICE_G.remove_edge((7, 2), (7, 3))
-
-    OFFICE_G.remove_edge((2, 2), (3, 2))
-    OFFICE_G.remove_edge((2, 3), (3, 3))
-    OFFICE_G.remove_edge((2, 4), (3, 4))
-    OFFICE_G.remove_edge((2, 5), (3, 5))
-    OFFICE_G.remove_edge((2, 6), (3, 6))
     OFFICE_G.remove_edge((2, 8), (3, 8))
-    OFFICE_G.remove_edge((2, 2), (2, 3))
-    OFFICE_G.remove_edge((3, 2), (3, 3))
-    OFFICE_G.remove_edge((2, 5), (2, 6))
-    OFFICE_G.remove_edge((3, 5), (3, 6))
-
+    OFFICE_G.remove_edge((2, 6), (3, 6))
+    OFFICE_G.remove_edge((2, 5), (3, 5))
+    OFFICE_G.remove_edge((2, 4), (3, 4))
+    OFFICE_G.remove_edge((2, 3), (3, 3))
+    OFFICE_G.remove_edge((2, 2), (3, 2))
+    OFFICE_G.remove_edge((2, 0), (3, 0))
     OFFICE_G.remove_edge((5, 0), (6, 0))
     OFFICE_G.remove_edge((5, 2), (6, 2))
     OFFICE_G.remove_edge((5, 3), (6, 3))
@@ -211,11 +221,6 @@ class Office(env.Env):
     OFFICE_G.remove_edge((5, 5), (6, 5))
     OFFICE_G.remove_edge((5, 6), (6, 6))
     OFFICE_G.remove_edge((5, 8), (6, 8))
-    OFFICE_G.remove_edge((5, 2), (5, 3))
-    OFFICE_G.remove_edge((6, 2), (6, 3))
-    OFFICE_G.remove_edge((5, 5), (5, 6))
-    OFFICE_G.remove_edge((6, 5), (6, 6))
-
     OFFICE_G.remove_edge((8, 0), (9, 0))
     OFFICE_G.remove_edge((8, 2), (9, 2))
     OFFICE_G.remove_edge((8, 3), (9, 3))
@@ -223,10 +228,7 @@ class Office(env.Env):
     OFFICE_G.remove_edge((8, 5), (9, 5))
     OFFICE_G.remove_edge((8, 6), (9, 6))
     OFFICE_G.remove_edge((8, 8), (9, 8))
-    OFFICE_G.remove_edge((8, 2), (8, 3))
-    OFFICE_G.remove_edge((9, 2), (9, 3))
-    OFFICE_G.remove_edge((8, 5), (8, 6))
-    OFFICE_G.remove_edge((9, 5), (9, 6))
+
 
     def __init__(self):
         self.robot_curr_pos = None

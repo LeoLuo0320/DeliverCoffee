@@ -38,6 +38,7 @@ if __name__ == '__main__':
     parser.add_argument('--hardware')
     args = parser.parse_args()
 
+    #for i in range(20):
     rollout(args)
     time.sleep(5)
 
