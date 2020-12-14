@@ -53,6 +53,10 @@ class Robot2(robot.Robot):
             #     return 'Move', [ret_val[0], ret_val[1], 2]
 
     class Grasp(hierarchy.Skill):
+        arg_in_len = 1
+        sub_skill_names = ['ObservePick', 'ObserveDrop']
+        ret_out_len = 1
+
         @staticmethod
         def step(arg, cnt, ret_name, ret_val):
             """

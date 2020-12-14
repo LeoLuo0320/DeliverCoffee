@@ -35,7 +35,7 @@ def _train(data_dirname, new_agent, past_agents, config):
 
 
 def train(config):
-    all_agents = [agents.catalog(DictTree(domain_name=config.domain, task_name=task_name, hardware_name="robot1", rollable=False, teacher=False)) for task_name in config.tasks]
+    all_agents = [agents.catalog(DictTree(domain_name=config.domain, task_name=task_name, hardware_name="robot2", rollable=False, teacher=False)) for task_name in config.tasks]
     data_dirname = "{}/{}".format(config.data, config.domain)
     for agent in all_agents[:-1]:
         client.delete(agent)

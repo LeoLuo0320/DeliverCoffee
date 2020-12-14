@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     #for i in range(20):
     rollout(args)
-    time.sleep(5)
+    #time.sleep(5)
 
     # Displays GUI of robot moving through gridworld
 

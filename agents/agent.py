@@ -4,9 +4,9 @@ import time
 from utils import DictTree
 
 class Agent(object):
-    # def __init__(self, config):
-    #     self.domain_name = config.domain_name
-    #     self.task_name = config.task_name
+    def __init__(self, config):
+        self.domain_name = config.domain_name
+        self.task_name = config.task_name
     #
     # def __repr__(self):
     #     return self.task_name
