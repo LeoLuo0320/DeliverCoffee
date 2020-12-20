@@ -10,13 +10,15 @@ class Skill(object):
         raise NotImplementedError
 
 
-class HierarchicalAgent(agent.Agent, metaclass=utils.subclass_set(Skill, 'skill_set')):
+class HierarchicalAgent(agent.Agent, metaclass = utils.subclass_set(Skill, 'skill_set')):
     """
     @DynamicAttrs
     """
 
     def __init__(self, config):
         super().__init__(config)
+        print(f"HierarchicalAgent: {self.skill_set}")
+        self.skillset = dict(list(self.skill_set.items()) + list(self.actions.items()))
         # self.skillset = DictTree({skill.__name__: DictTree(
         #     step=getattr(skill, 'step', None) if config.rollable else None,
         #     model_name=getattr(skill, 'model_name', self.default_model_name),
@@ -27,16 +29,19 @@ class HierarchicalAgent(agent.Agent, metaclass=utils.subclass_set(Skill, 'skill_
         #     min_valid_data=getattr(skill, 'min_valid_data', None),
         #     sub_arg_accuracy=getattr(skill, 'sub_arg_accuracy', None),
         # ) for skill in self.skills + self.actions})
-        for skill in self.skill_set.values():
-            if skill.sub_skill_names:
-                skill.ret_in_len = max(
-                    self.skill_set[sub_skill_name].ret_out_len for sub_skill_name in skill.sub_skill_names)
-                skill.arg_out_len = max(skill.ret_out_len, max(
-                    self.skill_set[sub_skill_name].arg_in_len for sub_skill_name in skill.sub_skill_names))
-        if config.rollable and not config.teacher:
-            for skill_name, skill in self.skillset.items():
-                if skill.sub_skill_names:
-                    skill.step = load_skill(config.model_dirname, skill_name, skill)
+
+        # a = list(self.skill_set.values()) + list(self.actions.values())
+        #
+        # for skill in (list(self.skill_set.values()) + list(self.actions.values())):
+        #     if skill.sub_skill_names:
+        #         skill.ret_in_len = max(
+        #             self.skillset[sub_skill_name].ret_out_len for sub_skill_name in skill.sub_skill_names)
+        #         skill.arg_out_len = max(skill.ret_out_len, max(
+        #             self.skillset[sub_skill_name].arg_in_len for sub_skill_name in skill.sub_skill_names))
+        # if config.rollable: #and not config.teacher:
+        #     for skill_name, skill in self.skillset.items():
+        #         if skill.sub_skill_names:
+        #             skill.step = self.load_skill(config.model_dirname, skill_name, skill)
         self.stack = None
         self.last_act_name = None
 

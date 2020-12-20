@@ -16,6 +16,7 @@ def rollout(config):
     agent = agents.catalog(DictTree(
         domain_name=config.domain,
         task_name=config.task,
+        rollable = True,
         model_dirname=config.model,
         hardware_name=config.hardware,
     ))
@@ -23,10 +24,10 @@ def rollout(config):
     init_arg = env.reset()
     agent.reset(init_arg)
     trace = agent.rollout(env)
-    time_stamp = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
-    pickle.dump(trace, open("{}/{}/{}/{}.pkl".format(config.data, config.domain, config.task,  time_stamp), 'wb'),
-                protocol=2)
-    #pickle.dump(trace, open("trace_result.pkl", 'wb'),protocol=2)
+    time_stamp = time.strftime("%Y-%m-%d %H-%M-%S", time.gmtime())
+    # pickle.dump(trace, open("{}/{}/{}/{}.pkl".format(config.data, config.domain, config.task,  time_stamp), 'wb'),
+    #             protocol=2)
+    pickle.dump(trace, open(f"{config.data}/{config.domain}/{config.task}/trace_result_{time_stamp}.pkl", 'wb'),protocol=2)
 
 
 if __name__ == '__main__':
@@ -38,9 +39,9 @@ if __name__ == '__main__':
     parser.add_argument('--hardware')
     args = parser.parse_args()
 
-    #for i in range(20):
-    rollout(args)
-    #time.sleep(5)
+    for i in range(20):
+        rollout(args)
+        time.sleep(5)
 
     # Displays GUI of robot moving through gridworld
 

@@ -4,11 +4,15 @@ from envs.office1 import Office1
 from utils import DictTree
 
 class CoffeeAgent(hardware.HardwareAgent):
+    actions = Office1.action_set
+
     def __init__(self, config):
         super().__init__(config)
-        self.domain_name = config.domain_name
-        self.task_name = config.task_name
-        self.actions = Office1.action_set
+        print(f"Coffee Skills: {self.skill_set}")
+        print(f"Coffee Actions: {self.actions}")
+        # self.domain_name = config.domain_name
+        # self.task_name = config.task_name
+        # self.actions = Office1.action_set
 
     @property
     def root_skill_name(self):
