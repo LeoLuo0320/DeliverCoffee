@@ -16,9 +16,10 @@ def rollout(config):
     agent = agents.catalog(DictTree(
         domain_name=config.domain,
         task_name=config.task,
-        rollable = True,
+        rollable=True,
         model_dirname=config.model,
         hardware_name=config.hardware,
+	evaluation=config.eval
     ))
 
     init_arg = env.reset()
@@ -37,6 +38,7 @@ if __name__ == '__main__':
     parser.add_argument('--model')
     parser.add_argument('--data')
     parser.add_argument('--hardware')
+    parser.add_argument('--eval')
     args = parser.parse_args()
 
     for i in range(20):

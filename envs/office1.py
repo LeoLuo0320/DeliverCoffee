@@ -15,7 +15,8 @@ class Office1(office.Office):
     class ObservePick(env.Action):
         arg_in_len = 1
         ret_out_len = 1
-
+        sub_skill_names = []
+	
         @staticmethod
         def apply(e, arg):
             if arg == [0]:
@@ -30,6 +31,7 @@ class Office1(office.Office):
     class ObserveDrop(env.Action):
         arg_in_len = 1
         ret_out_len = 1
+        sub_skill_names = []
 
         @staticmethod
         def apply(e, arg):

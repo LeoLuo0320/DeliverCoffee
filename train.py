@@ -35,7 +35,7 @@ def _train(data_dirname, new_agent, past_agents, config):
 
 
 def train(config):
-    all_agents = [agents.catalog(DictTree(domain_name=config.domain, task_name=task_name, hardware_name="robot2", rollable=False, teacher=False)) for task_name in config.tasks]
+    all_agents = [agents.catalog(DictTree(evaluation=config.eval, model_dirname=config.model, domain_name=config.domain, task_name=task_name, hardware_name=config.hardware, rollable=False, teacher=False)) for task_name in config.tasks]
     data_dirname = "{}/{}".format(config.data, config.domain)
     for agent in all_agents[:-1]:
         client.delete(agent)
@@ -69,10 +69,13 @@ if __name__ == '__main__':
     parser.add_argument('--domain', required=True)
     #parser.add_argument('--tasks', required=True)
     parser.add_argument('--tasks', nargs='+', required=True)
+    parser.add_argument('--hardware', required=True)
     parser.add_argument('--data', required=True)
     parser.add_argument('--runs')
     parser.add_argument('--independent', action='store_true')
     parser.add_argument('--full-batch', action='store_true')
+    parser.add_argument('--model')
+    parser.add_argument('--eval', required=True)
     args = parser.parse_args()
     args.runs = 1
     for _ in range(int(args.runs) or 1):

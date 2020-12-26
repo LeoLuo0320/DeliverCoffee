@@ -266,6 +266,7 @@ class Office(env.Env):
     class ObserveEnv(env.Action):
         arg_in_len = 1
         ret_out_len = 4
+        sub_skill_names = []
 
         @staticmethod
         def apply(e, arg):
@@ -284,6 +285,7 @@ class Office(env.Env):
     class PlanPath(env.Action):
         arg_in_len = 5
         ret_out_len = 4
+        sub_skill_names = []
 
         @staticmethod
         def apply(e, arg):
@@ -315,6 +317,7 @@ class Office(env.Env):
     class Move(env.Action):
         arg_in_len = 3
         ret_out_len = 1
+        sub_skill_names = []
 
         @staticmethod
         def legal_move(e, move_to):
