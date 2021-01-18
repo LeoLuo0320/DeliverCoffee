@@ -1,5 +1,6 @@
 #from tdict import Tdict
 from utils import DictTree
+import utils
 import hws
 from agents import hierarchy
 import pickle
@@ -21,9 +22,9 @@ class HardwareAgent(hierarchy.HierarchicalAgent):
                     self.skillset[sub_skill_name].ret_out_len for sub_skill_name in skill.sub_skill_names)
                 skill.arg_out_len = max(skill.ret_out_len, max(
                     self.skillset[sub_skill_name].arg_in_len for sub_skill_name in skill.sub_skill_names))
-        if not(config.model_dirname=='None') and (config.evaluation=='True'): #and not config.teacher:
+        if not(config.model_dirname == 'None') and (config.evaluation == 'True'): #and not config.teacher:
             # print("Here")
-            for skill_name, skill in self.skillset.items():
+            for skill_name, skill in self.skill_set.items():
                 # print(f"model: {config.model_dirname}")
                 # print(f"skill_name: {skill_name}")
                 # print(f"skill: {skill}")
@@ -33,7 +34,7 @@ class HardwareAgent(hierarchy.HierarchicalAgent):
     def load_skill(self, model_dirname, skill_name, skill):
         model = pickle.load(open("{}/{}.pkl".format(model_dirname, skill_name), 'rb'))
 
-        def step(arg, cnt, ret_name, ret_val, obs):
+        def step(arg, cnt, ret_name, ret_val):
             if arg is not None:
                 assert not any(arg[skill.arg_in_len:])
                 arg = arg[:skill.arg_in_len]
@@ -43,8 +44,7 @@ class HardwareAgent(hierarchy.HierarchicalAgent):
             sub_skill_names = [None] + skill.sub_skill_names
             iput = (utils.pad(arg, skill.arg_in_len) + [cnt]
                     + utils.one_hot(sub_skill_names.index(ret_name), len(sub_skill_names))
-                    + utils.pad(ret_val, skill.ret_in_len)
-                    + obs)
+                    + utils.pad(ret_val, skill.ret_in_len))
             oput = model.predict([iput])
             sub_name = sub_skill_names[oput.sub[0]]
             sub_arg = list(oput.arg[0])

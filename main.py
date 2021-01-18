@@ -8,6 +8,7 @@ import robo_ani
 import plot
 import sys
 
+
 def rollout(config):
     env = envs.catalog(DictTree(
         domain_name=config.domain,
@@ -19,7 +20,7 @@ def rollout(config):
         rollable=True,
         model_dirname=config.model,
         hardware_name=config.hardware,
-	evaluation=config.eval
+        evaluation=config.eval
     ))
 
     init_arg = env.reset()
@@ -28,7 +29,8 @@ def rollout(config):
     time_stamp = time.strftime("%Y-%m-%d %H-%M-%S", time.gmtime())
     # pickle.dump(trace, open("{}/{}/{}/{}.pkl".format(config.data, config.domain, config.task,  time_stamp), 'wb'),
     #             protocol=2)
-    pickle.dump(trace, open(f"{config.data}/{config.domain}/{config.task}/trace_result_{time_stamp}.pkl", 'wb'),protocol=2)
+    pickle.dump(trace, open(f"{config.data}/{config.domain}/{config.task}/trace_result_{time_stamp}.pkl", 'wb'),
+                protocol=2)
 
 
 if __name__ == '__main__':
@@ -41,9 +43,9 @@ if __name__ == '__main__':
     parser.add_argument('--eval')
     args = parser.parse_args()
 
-    for i in range(20):
-        rollout(args)
-        time.sleep(5)
+    # for i in range(20):
+    rollout(args)
+    # time.sleep(5)
 
     # Displays GUI of robot moving through gridworld
 

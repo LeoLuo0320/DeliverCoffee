@@ -1,4 +1,5 @@
 from . import hardware
+from . import hardware
 from . import hierarchy
 from envs.office1 import Office1
 from utils import DictTree

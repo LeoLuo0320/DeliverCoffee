@@ -60,7 +60,7 @@ def train(config):
         os.makedirs("results/{}/{}".format(config.domain, ".".join(config.tasks)))
     except OSError:
         pass
-    time_stamp = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+    time_stamp = time.strftime("%Y-%m-%d %H-%M-%S", time.gmtime())
     pickle.dump(results, open("results/{}/{}/{}.{}.pkl".format(config.domain, ".".join(config.tasks), all_agents[-1].task_name, time_stamp), 'wb'), protocol=2)
 
 

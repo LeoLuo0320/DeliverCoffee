@@ -17,8 +17,8 @@ class HierarchicalAgent(agent.Agent, metaclass = utils.subclass_set(Skill, 'skil
 
     def __init__(self, config):
         super().__init__(config)
-        print(f"HierarchicalAgent: {self.skill_set}")
-        self.skillset = dict(list(self.skill_set.items()) + list(self.actions.items()))
+        # print(f"HierarchicalAgent: {self.skill_set}")
+        # self.skillset = dict(list(self.skill_set.items()) + list(self.actions.items()))
         # self.skillset = DictTree({skill.__name__: DictTree(
         #     step=getattr(skill, 'step', None) if config.rollable else None,
         #     model_name=getattr(skill, 'model_name', self.default_model_name),
@@ -88,29 +88,29 @@ class HierarchicalAgent(agent.Agent, metaclass = utils.subclass_set(Skill, 'skil
         self.last_act_name = None
         return None, None, DictTree(steps=steps)
 
-    def load_skill(model_dirname, skill_name, skill):
-        model = pickle.load(open("{}/{}.pkl".format(model_dirname, skill_name), 'rb'))
-
-        def step(arg, cnt, ret_name, ret_val, obs):
-            if arg is not None:
-                assert not any(arg[skill.arg_in_len:])
-                arg = arg[:skill.arg_in_len]
-            if ret_val is not None:
-                assert not any(ret_val[skill.ret_in_len:])
-                ret_val = ret_val[:skill.ret_in_len]
-            sub_skill_names = [None] + skill.sub_skill_names
-            iput = (utils.pad(arg, skill.arg_in_len) + [cnt]
-                    + utils.one_hot(sub_skill_names.index(ret_name), len(sub_skill_names))
-                    + utils.pad(ret_val, skill.ret_in_len)
-                    + obs)
-            oput = model.predict([iput])
-            sub_name = sub_skill_names[oput.sub[0]]
-            sub_arg = list(oput.arg[0])
-            if sub_name is None:
-                return None, sub_arg
-            else:
-                assert not any(sub_arg[skill.arg_out_len:])
-                sub_arg = sub_arg[:skill.arg_out_len]
-                return sub_name, sub_arg
-
-        return step
+    # def load_skill(model_dirname, skill_name, skill):
+    #     model = pickle.load(open("{}/{}.pkl".format(model_dirname, skill_name), 'rb'))
+    #
+    #     def step(arg, cnt, ret_name, ret_val, obs):
+    #         if arg is not None:
+    #             assert not any(arg[skill.arg_in_len:])
+    #             arg = arg[:skill.arg_in_len]
+    #         if ret_val is not None:
+    #             assert not any(ret_val[skill.ret_in_len:])
+    #             ret_val = ret_val[:skill.ret_in_len]
+    #         sub_skill_names = [None] + skill.sub_skill_names
+    #         iput = (utils.pad(arg, skill.arg_in_len) + [cnt]
+    #                 + utils.one_hot(sub_skill_names.index(ret_name), len(sub_skill_names))
+    #                 + utils.pad(ret_val, skill.ret_in_len)
+    #                 + obs)
+    #         oput = model.predict([iput])
+    #         sub_name = sub_skill_names[oput.sub[0]]
+    #         sub_arg = list(oput.arg[0])
+    #         if sub_name is None:
+    #             return None, sub_arg
+    #         else:
+    #             assert not any(sub_arg[skill.arg_out_len:])
+    #             sub_arg = sub_arg[:skill.arg_out_len]
+    #             return sub_name, sub_arg
+    #
+    #     return step

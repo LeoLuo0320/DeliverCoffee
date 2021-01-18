@@ -16,7 +16,7 @@ class Office1(office.Office):
         arg_in_len = 1
         ret_out_len = 1
         sub_skill_names = []
-	
+
         @staticmethod
         def apply(e, arg):
             if arg == [0]:
