@@ -272,14 +272,14 @@ class Office(env.Env):
         def apply(e, arg):
             """
                 arg: coffee or office
-                ret_val: [coffee or office coordinates, robot current position coordinates, office graph]
+                ret_val: [coffee or office coordinates, robot current position coordinates]
             """
             # TODO: make arg numeric
             #assert arg in [[0], [1]]
 
-            if arg == [0]:
+            if arg[0] <= 0.5:
                 return list(e.COFFEE_POS) + list(e.robot_curr_pos)
-            if arg == [1]:
+            if arg[0] > 0.5:
                 return list(e.OFFICE_POS) + list(e.robot_curr_pos)
 
     class PlanPath(env.Action):
@@ -290,8 +290,8 @@ class Office(env.Env):
         @staticmethod
         def apply(e, arg):
             if arg[0] == 0:
-                curr_dest = (arg[3], arg[4])
-                fin_dest = (arg[1], arg[2])
+                curr_dest = (int(round(arg[3])), int(round(arg[4])))
+                fin_dest = (int(round(arg[1])), int(round(arg[2])))
 
                 h = e.OFFICE_G.copy()
                 edges_to_remove = [edge for edge in h.edges(data=True) if (h.get_edge_data(*edge))]
@@ -334,8 +334,8 @@ class Office(env.Env):
                 arg: coordinates to move to, final destination coordinates, robot_name
                 ret_val: True or False if moved to final position yet
             """
-            move_to = (arg[0], arg[1])
-            fin_dest = (arg[2], arg[3])
+            move_to = (int(round(arg[0])), int(round(arg[1])))
+            fin_dest = (int(round(arg[2])), int(round(arg[3])))
 
             if tuple(e.robot_curr_pos) == fin_dest:
                 e.display_env_info(0)
@@ -343,5 +343,6 @@ class Office(env.Env):
             elif Office.Move.legal_move(e, move_to):
                 e.robot_curr_pos = np.asarray(move_to)
                 e.display_env_info(1)
+                return [False]
             else:
                 return [False]
